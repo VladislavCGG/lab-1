@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Аналіз чисел — Варіант 29</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    .developer {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .instruction {
+      background-color: #e8f4fc;
+      padding: 12px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #1c6ea4;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      background-color: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .error {
+      color: #c0392b;
+      background-color: #fadbd8;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    .highlight-min {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    .highlight-max {
+      color: #27ae60;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Аналіз набору чисел (Варіант 29)</h2>
+  <div class="developer">Розробник: Чава [Ім’я]</div>
+  
+  <div class="instruction">
+    Введіть 10 чисел через кому (наприклад: 139,941,287,797,414,333,814,533,743,204).<br>
+    Кожне число має бути від 10 до 1000. Дробові числа — з крапкою (наприклад: 12.5).
+  </div>
+
+  <input type="text" id="numbersInput" placeholder="139,941,287,797,414,333,814,533,743,204" />
+  <button onclick="analyze()">Аналізувати</button>
+
+  <div id="output"></div>
+
+  <script>
+    function analyze() {
+      const input = document.getElementById("numbersInput").value.trim();
+      const output = document.getElementById("output");
+      output.innerHTML = "";
+
+      if (!input) {
+        output.innerHTML = '<div class="error">Будь ласка, введіть числа.</div>';
+        return;
+      }
+
+      const parts = input.split(',').map(s => s.trim());
+      
+      if (parts.length !== 10) {
+        output.innerHTML = `<div class="error">Помилка: потрібно рівно 10 чисел, а введено ${parts.length}.</div>`;
+        return;
+      }
+
+      const numbers = [];
+      for (let part of parts) {
+        if (part === "") {
+          output.innerHTML = '<div class="error">Помилка: порожній елемент у списку.</div>';
+          return;
+        }
+        const num = parseFloat(part);
+        if (isNaN(num)) {
+          output.innerHTML = `<div class="error">Помилка: "${part}" — не число. Використовуйте крапку для дробової частини.</div>`;
+          return;
+        }
+        if (num < 10 || num > 1000) {
+          output.innerHTML = `<div class="error">Помилка: число ${num} поза діапазоном [10, 1000].</div>`;
+          return;
+        }
+        numbers.push(num);
+      }
+
+      const min = Math.min(...numbers);
+      const max = Math.max(...numbers);
+      const avg = (numbers.reduce((a, b) => a + b, 0) / numbers.length).toFixed(2);
+
+      output.innerHTML = `
+        <div class="result">
+          <p><span class="highlight-min">Min:</span> ${min}</p>
+          <p><span class="highlight-max">Max:</span> ${max}</p>
+          <p>Average: ${avg}</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
